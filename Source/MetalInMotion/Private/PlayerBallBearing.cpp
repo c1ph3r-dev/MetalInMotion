@@ -53,11 +53,11 @@ Establish the default pawn input bindings for a player ball bearing.
 
 static void InitializeDefaultPawnInputBindings()
 {
-	static bool bindingsAdded = false;
+	static bool bIndingsAdded = false;
 
-	if (bindingsAdded == false)
+	if (bIndingsAdded == false)
 	{
-		bindingsAdded = true;
+		bIndingsAdded = true;
 
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLongitudinally", EKeys::W, 1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLongitudinally", EKeys::S, -1.f));

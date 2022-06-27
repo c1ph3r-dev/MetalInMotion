@@ -13,5 +13,7 @@ UCLASS()
 class METALINMOTION_API AMetalInMotionGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AMetalInMotionGameModeBase();
 };
