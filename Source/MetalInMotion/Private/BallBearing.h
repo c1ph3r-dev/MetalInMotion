@@ -37,6 +37,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BallBearing)
 	bool Magnetized;
 
+	// Reset the location of the ball bearing to its original position when spawned
+	UFUNCTION(BlueprintCallable, Category = BallBearing)
+	void ResetLocation() const;
+
+protected:
+	// Called when the game starts or when spawned.
+	virtual void BeginPlay() override;
+
+	// Control the movement of the ball bearing, called every frame.
+	virtual void Tick(float DeltaSeconds) override;
+
+	// Receive notification of a collision contact and record that we're in contact with something.
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
+	// Is the ball bearing in contact with any other geometry?
+	bool InContact;
+
+private:
+
+	// The initial location of the ball bearing at the game start
+	FVector InitialLocation;
+	
 	// Allow the ball bearing HUD unfettered access to this class.
 	friend class ABallBearingHUD;
 };

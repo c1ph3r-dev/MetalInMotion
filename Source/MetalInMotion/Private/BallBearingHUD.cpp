@@ -23,6 +23,7 @@ void ABallBearingHUD::DrawHUD()
 
 	if (BallBearing != nullptr)
 	{
+		AddBool(L"In contact", BallBearing->InContact);
 		AddFloat(L"Speed", BallBearing->GetVelocity().Size() / 100.0f);
 		AddFloat(L"Dash timer", BallBearing->DashTimer);
 		AddFloat(L"Input latitude", BallBearing->InputLatitude);
