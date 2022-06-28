@@ -70,6 +70,13 @@ void ABallBearingGoal::Tick(float DeltaSeconds)
 	const float SphereRadius = Cast<USphereComponent>(GetCollisionComponent())->GetScaledSphereRadius();
 	float LocalMagnetism = Magnetism;
 
+	// If we're cheating then give our goals extra magnetism.
+
+	static const IConsoleVariable* ExtraForce = IConsoleManager::Get().FindConsoleVariable(TEXT("OurGame.ExtraMagnetism"));
+
+	if (ExtraForce && ExtraForce->GetInt() != 0)
+		Magnetism *= 4.f;
+
 	/// Now iterate around the proximate ball bearings and draw them towards our center
 	/// using physics forces scaled by magnetism and distance from the center.
 
