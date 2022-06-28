@@ -48,6 +48,26 @@ ABallBearingGoal::ABallBearingGoal() :
 }
 
 /**
+Does this goal have a ball bearing resting in its center?
+*********************************************************************************/
+
+bool ABallBearingGoal::HasBallBearing() const
+{
+	const FVector OurLocation = GetActorLocation();
+
+	for (const ABallBearing* BallBearing : BallBearings)
+	{
+		const FVector Difference = OurLocation - BallBearing->GetActorLocation();
+		const float Distance = Difference.Size();
+
+		if (Distance < 75.f)
+			return true;
+	}
+
+	return false;
+}
+
+/**
 Hide the collision and sprite components in-game.
 *********************************************************************************/
 

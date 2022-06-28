@@ -9,7 +9,6 @@ Current maintainer: Jonathan Rampersad.
 
 #include "BallBearing.h"
 
-
 /**
 Create a static mesh for this ball bearing on object construction.
 *********************************************************************************/

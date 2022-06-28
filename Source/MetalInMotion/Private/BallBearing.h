@@ -14,7 +14,6 @@ Current maintainer: Jonathan Rampersad.
 #include "Components/StaticMeshComponent.h"
 #include "BallBearing.generated.h"
 
-
 /**
 Main ball bearing class, derived from pawn but with no input and no camera.
 *********************************************************************************/
@@ -25,7 +24,6 @@ class METALINMOTION_API ABallBearing : public APawn
 	GENERATED_BODY()
 
 public:
-	
 	// Create a static mesh for this ball bearing on object construction.
 	ABallBearing();
 
@@ -55,7 +53,6 @@ protected:
 	bool InContact;
 
 private:
-
 	// The initial location of the ball bearing at the game start
 	FVector InitialLocation;
 	

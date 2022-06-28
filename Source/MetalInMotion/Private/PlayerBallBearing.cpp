@@ -53,11 +53,11 @@ Establish the default pawn input bindings for a player ball bearing.
 
 static void InitializeDefaultPawnInputBindings()
 {
-	static bool bIndingsAdded = false;
+	static bool bBIndingsAdded = false;
 
-	if (bIndingsAdded == false)
+	if (bBIndingsAdded == false)
 	{
-		bIndingsAdded = true;
+		bBIndingsAdded = true;
 
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLongitudinally", EKeys::W, 1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLongitudinally", EKeys::S, -1.f));
@@ -153,9 +153,9 @@ void APlayerBallBearing::Tick(float DeltaSeconds)
 		Velocity *= MaximumSpeed * 100.f;
 		Velocity.Z = Z;
 
-		float BreakingRatio = FMath::Pow(1.f - FMath::Min(DashTimer, 1.f), 2.f);
+		const float BreakingRatio = FMath::Pow(1.f - FMath::Min(DashTimer, 1.f), 2.f);
 
-		FVector MergedVelocity = FMath::Lerp(BallMesh->GetPhysicsLinearVelocity(), Velocity, BreakingRatio);
+		const FVector MergedVelocity = FMath::Lerp(BallMesh->GetPhysicsLinearVelocity(), Velocity, BreakingRatio);
 
 		BallMesh->SetPhysicsLinearVelocity(MergedVelocity);
 	}

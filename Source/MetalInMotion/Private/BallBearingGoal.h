@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Goal)
 	float Magnetism;
 
+	// Does this goal have a ball bearing resting in its center?
+	bool HasBallBearing() const;
+
 protected:
 	// Hide the collision and sprite components in-game.
 	virtual void PostInitializeComponents() override;
