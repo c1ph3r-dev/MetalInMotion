@@ -71,8 +71,8 @@ static void InitializeDefaultPawnInputBindings()
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLaterally", EKeys::Right, 1.f));
 		UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("BallBearing_MoveLaterally", EKeys::Gamepad_LeftX, 1.f));
 
-		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("BallBearing_Jump", EKeys::Enter));
-		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("BallBearing_Dash", EKeys::SpaceBar));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("BallBearing_Jump", EKeys::SpaceBar));
+		UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("BallBearing_Dash", EKeys::Q));
 	}
 }
 
@@ -103,6 +103,9 @@ Have the ball bearing perform a jump.
 
 void APlayerBallBearing::Jump()
 {
+	// Only jump if we're in contact with something, normally the ground
+	if(InContact)
+		BallMesh->AddImpulse(FVector(0.f, 0.f, JumpForce * 1000.f));
 }
 
 
@@ -112,6 +115,23 @@ Have the ball bearing perform a dash.
 
 void APlayerBallBearing::Dash()
 {
+	// Only dash if we're not dashing already.
+	if (DashTimer == 0.f)
+	{
+		// Only dash if we have an existing velocity vector to dash towards.
+		FVector Velocity = BallMesh->GetPhysicsLinearVelocity();
+		if(Velocity.Size() > 1.f)
+		{
+			Velocity.Normalize();
+			Velocity *= DashForce * 1000.f;
+
+			// Add the impulse to the ball to perform the dash.
+			BallMesh->AddImpulse(Velocity);
+
+			// Set the length of time that we're to dash for.
+			DashTimer = 1.5f;
+		}
+	}
 }
 
 
@@ -123,5 +143,25 @@ void APlayerBallBearing::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	BallMesh->AddForce(FVector(InputLongitude, InputLatitude, 0.0f) * ControllerForce * BallMesh->GetMass());
+	FVector Velocity = BallMesh->GetPhysicsLinearVelocity();
+	float Z = Velocity.Z;
+	Velocity.Z = 0.f;
+
+	if(Velocity.Size() > MaximumSpeed * 100.f)
+	{
+		Velocity.Normalize();
+		Velocity *= MaximumSpeed * 100.f;
+		Velocity.Z = Z;
+
+		float BreakingRatio = FMath::Pow(1.f - FMath::Min(DashTimer, 1.f), 2.f);
+
+		FVector MergedVelocity = FMath::Lerp(BallMesh->GetPhysicsLinearVelocity(), Velocity, BreakingRatio);
+
+		BallMesh->SetPhysicsLinearVelocity(MergedVelocity);
+	}
+	else
+		BallMesh->AddForce(FVector(InputLongitude, InputLatitude, 0.0f) * ControllerForce * BallMesh->GetMass());
+
+	if(DashTimer > 0.0f)
+		DashTimer = FMath::Max(0.0f, DashTimer - DeltaSeconds);
 }

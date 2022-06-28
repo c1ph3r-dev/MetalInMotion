@@ -19,7 +19,7 @@ void ABallBearingHUD::DrawHUD()
 {
 	Super::DrawHUD();
 
-	APlayerBallBearing* BallBearing = Cast<APlayerBallBearing>(GetOwningPawn());
+	const APlayerBallBearing* BallBearing = Cast<APlayerBallBearing>(GetOwningPawn());
 
 	if (BallBearing != nullptr)
 	{
