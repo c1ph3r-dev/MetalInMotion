@@ -28,7 +28,7 @@ public:
 	ABallBearingGoal();
 
 	// The power of the magnetism.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Goal)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Goal)
 	float Magnetism;
 
 	// Does this goal have a ball bearing resting in its center?

@@ -19,7 +19,10 @@ Construct the game mode, assigning a debugging HUD class.
 *********************************************************************************/
 
 AMetalInMotionGameModeBase::AMetalInMotionGameModeBase() :
-	FinishedTime(0.0f), bFinishedSoundPlayed(false)
+	FinishedTime(0.0f),
+	Difficulty(EDifficulty::ED_Normal),
+	bFinishedSoundPlayed(false),
+	Level(ESpeedrunData::ESD_L1)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -67,6 +70,7 @@ void AMetalInMotionGameModeBase::Tick(float DeltaSeconds)
 	// The delay is to avoid ball bearings passing through the goals without stopping.
 	if(FinishedTime > 1.f)
 	{
+		EndTimer();
 		// Play the finished audio cue if not already done.
 		if(!bFinishedSoundPlayed && FinishedSound)
 		{
@@ -75,9 +79,37 @@ void AMetalInMotionGameModeBase::Tick(float DeltaSeconds)
 		}
 
 		// If the game has been finished for at least 10 seconds then reset the game ready to go around again.
-		if (FinishedTime > 10.0f)
+		if (FinishedTime > 3.0f)
 		{
-			Super::RestartGame();
+			NextLevel();
 		}
 	}
+}
+
+void AMetalInMotionGameModeBase::NextLevel() const
+{
+	FName LevelName;
+
+	switch (Level)
+	{
+	case ESpeedrunData::ESD_L1:
+		LevelName = TEXT("Level2");
+		break;
+	case ESpeedrunData::ESD_L2:
+		LevelName = TEXT("Level3");
+		break;
+	case ESpeedrunData::ESD_L3:
+		LevelName = TEXT("Level4");
+		break;
+	case ESpeedrunData::ESD_L4:
+		LevelName = TEXT("Level5");
+		break;
+	case ESpeedrunData::ESD_L5:
+		LevelName = TEXT("HighScore");
+		break;
+	case ESpeedrunData::ESD_Total:
+		break;
+	}
+	
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName);
 }
