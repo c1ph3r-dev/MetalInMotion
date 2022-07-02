@@ -64,10 +64,6 @@
 				"Win64",
 				"Linux"
 			]
-		},
-		{
-			"Name": "Ansel",
-			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
