@@ -11,10 +11,13 @@ void UMetalInMotionGameInstance::Check(FSpeedrunStruct Data, int32 Level)
 	if(Data.Difficulty == EDifficulty::ED_Hard)
 		Level += 6;
 
-	if(HighScores[Level].Minute >= Data.Minute)
-		if(HighScores[Level].Seconds >= Data.Seconds)
-			if(HighScores[Level].Milliseconds > Data.Milliseconds)
-				HighScores[Level] = Data;
+	if(HighScores[Level].Minute > Data.Minute)
+		HighScores[Level] = Data;
+	else if(HighScores[Level].Seconds > Data.Seconds)
+		HighScores[Level] = Data;
+	else if(HighScores[Level].Milliseconds > Data.Milliseconds)
+		HighScores[Level] = Data;
+				
 }
 
 UMetalInMotionGameInstance::UMetalInMotionGameInstance()
@@ -65,10 +68,12 @@ void UMetalInMotionGameInstance::SaveGame()
 
 	for (int i = 0; i < 12; i++)
 	{
-		if(SaveGameInstance->HighScores[i].Minute >= HighScores[i].Minute)
-			if(SaveGameInstance->HighScores[i].Seconds >= HighScores[i].Seconds)
-				if(SaveGameInstance->HighScores[i].Milliseconds >= HighScores[i].Milliseconds)
-					SaveGameInstance->HighScores[i] = HighScores[i];
+		if(SaveGameInstance->HighScores[i].Minute > HighScores[i].Minute)
+			SaveGameInstance->HighScores[i] = HighScores[i];
+		else if(SaveGameInstance->HighScores[i].Seconds > HighScores[i].Seconds)
+			SaveGameInstance->HighScores[i] = HighScores[i];
+		else if(SaveGameInstance->HighScores[i].Milliseconds >= HighScores[i].Milliseconds)
+			SaveGameInstance->HighScores[i] = HighScores[i];
 	}
 }
 
