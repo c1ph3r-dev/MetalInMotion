@@ -67,7 +67,7 @@ void UMetalInMotionGameInstance::SaveGame()
 	{
 		if(SaveGameInstance->HighScores[i].Minute >= HighScores[i].Minute)
 			if(SaveGameInstance->HighScores[i].Seconds >= HighScores[i].Seconds)
-				if(SaveGameInstance->HighScores[i].Milliseconds > HighScores[i].Milliseconds)
+				if(SaveGameInstance->HighScores[i].Milliseconds >= HighScores[i].Milliseconds)
 					SaveGameInstance->HighScores[i] = HighScores[i];
 	}
 }
@@ -79,18 +79,30 @@ void UMetalInMotionGameInstance::NewScore(FSpeedrunStruct Data)
 	{
 	case ESpeedrunData::ESD_L1:
 		TempScores[0] = Data;
+		TempScores[5].Minute += TempScores[0].Minute;
+		TempScores[5].Seconds += TempScores[0].Seconds;
+		TempScores[5].Milliseconds += TempScores[0].Milliseconds;
 		Check(Data, 0);
 		break;
 	case ESpeedrunData::ESD_L2:
 		TempScores[1] = Data;
+		TempScores[5].Minute += TempScores[1].Minute;
+		TempScores[5].Seconds += TempScores[1].Seconds;
+		TempScores[5].Milliseconds += TempScores[1].Milliseconds;
 		Check(Data, 1);
 		break;
 	case ESpeedrunData::ESD_L3:
 		TempScores[2] = Data;
+		TempScores[5].Minute += TempScores[2].Minute;
+		TempScores[5].Seconds += TempScores[2].Seconds;
+		TempScores[5].Milliseconds += TempScores[2].Milliseconds;
 		Check(Data, 2);
 		break;
 	case ESpeedrunData::ESD_L4:
 		TempScores[3] = Data;
+		TempScores[5].Minute += TempScores[3].Minute;
+		TempScores[5].Seconds += TempScores[3].Seconds;
+		TempScores[5].Milliseconds += TempScores[3].Milliseconds;
 		Check(Data, 3);
 		break;
 	case ESpeedrunData::ESD_L5:
@@ -98,13 +110,23 @@ void UMetalInMotionGameInstance::NewScore(FSpeedrunStruct Data)
 		Check(Data, 4);
 
 		TempScores[5].Difficulty = Data.Difficulty;
-		for (int i = 0; i < 5; i++)
+		
+		TempScores[5].Minute += TempScores[4].Minute;
+		TempScores[5].Seconds += TempScores[4].Seconds;
+		TempScores[5].Milliseconds += TempScores[4].Milliseconds;
+		
+		while (TempScores[5].Milliseconds >= 100)
 		{
-			TempScores[5].Minute += TempScores[i].Minute;
-			TempScores[5].Seconds += TempScores[i].Seconds;
-			TempScores[5].Milliseconds += TempScores[i].Milliseconds;
+			TempScores[5].Milliseconds -= 100;
+			TempScores[5].Seconds += 1;
 		}
-
+		
+		while (TempScores[5].Seconds >= 60)
+        {
+            TempScores[5].Seconds -= 60;
+        	TempScores[5].Minute += 1;
+        }
+        		
 		Check(TempScores[5], 5);
 
 		SaveGame();
